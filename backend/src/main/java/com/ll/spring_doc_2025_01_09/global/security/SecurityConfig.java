@@ -28,8 +28,10 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers("/api/*/posts/statistics")
                                 .hasRole("ADMIN")
-                                .anyRequest()
+                                .requestMatchers("/api/*/**")
                                 .authenticated()
+                                .anyRequest()
+                                .permitAll()
                 )
                 .headers(
                         headers ->
