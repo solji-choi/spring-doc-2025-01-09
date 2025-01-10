@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Ut {
     public static class str {
@@ -83,7 +84,6 @@ public class Ut {
     }
 
     public static class file {
-
         public static void downloadByHttp(String url, String dirPath) {
             try {
                 HttpClient client = HttpClient.newBuilder()
@@ -163,6 +163,24 @@ public class Ut {
                         };
                     })
                     .orElse("");
+        }
+    }
+
+    public class cmd {
+        public static void runAsync(String cmd) {
+            new Thread(() -> {
+                run(cmd);
+            }).start();
+        }
+
+        public static void run(String cmd) {
+            try {
+                ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", cmd);
+                Process process = processBuilder.start();
+                process.waitFor(1, TimeUnit.MINUTES);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

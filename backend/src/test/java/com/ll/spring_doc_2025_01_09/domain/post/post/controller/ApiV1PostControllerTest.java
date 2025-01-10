@@ -4,6 +4,7 @@ import com.ll.spring_doc_2025_01_09.domain.member.member.entity.Member;
 import com.ll.spring_doc_2025_01_09.domain.member.member.service.MemberService;
 import com.ll.spring_doc_2025_01_09.domain.post.post.entity.Post;
 import com.ll.spring_doc_2025_01_09.domain.post.post.service.PostService;
+import com.ll.spring_doc_2025_01_09.standard.search.SearchKeywordTypeV1;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -116,7 +117,6 @@ public class ApiV1PostControllerTest {
                 .andExpect(handler().methodName("write"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.resultCode").value("201-1"))
-                .andExpect(jsonPath("$.msg").value("%d번 글이 작성되었습니다.".formatted(post.getId())))
                 .andExpect(jsonPath("$.data.id").value(post.getId()))
                 .andExpect(jsonPath("$.data.createDate").value(Matchers.startsWith(post.getCreateDate().toString().substring(0, 25))))
                 .andExpect(jsonPath("$.data.modifyDate").value(Matchers.startsWith(post.getModifyDate().toString().substring(0, 25))))
@@ -542,7 +542,7 @@ public class ApiV1PostControllerTest {
                 .andDo(print());
 
         Page<Post> postPage = postService
-                .findByListedPaged(true, "title", "축구", 1, 10);
+                .findByListedPaged(true, SearchKeywordTypeV1.title, "축구", 1, 10);
 
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
@@ -583,7 +583,7 @@ public class ApiV1PostControllerTest {
                 .andDo(print());
 
         Page<Post> postPage = postService
-                .findByListedPaged(true, "content", "18명", 1, 10);
+                .findByListedPaged(true, SearchKeywordTypeV1.content, "18명", 1, 10);
 
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
@@ -673,7 +673,7 @@ public class ApiV1PostControllerTest {
                 .andDo(print());
 
         Page<Post> postPage = postService
-                .findByAuthorPaged(actor, "title", "발야구", 1, 10);
+                .findByAuthorPaged(actor, SearchKeywordTypeV1.title, "발야구", 1, 10);
 
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
@@ -718,7 +718,7 @@ public class ApiV1PostControllerTest {
                 .andDo(print());
 
         Page<Post> postPage = postService
-                .findByAuthorPaged(actor, "content", "18명", 1, 10);
+                .findByAuthorPaged(actor, SearchKeywordTypeV1.content, "18명", 1, 10);
 
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))

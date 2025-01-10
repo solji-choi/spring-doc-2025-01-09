@@ -3,6 +3,7 @@ package com.ll.spring_doc_2025_01_09.domain.post.post.service;
 import com.ll.spring_doc_2025_01_09.domain.member.member.entity.Member;
 import com.ll.spring_doc_2025_01_09.domain.post.post.entity.Post;
 import com.ll.spring_doc_2025_01_09.domain.post.post.repository.PostRepository;
+import com.ll.spring_doc_2025_01_09.standard.search.SearchKeywordTypeV1;
 import com.ll.spring_doc_2025_01_09.standard.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -67,14 +68,15 @@ public class PostService {
         return postRepository.findByListed(listed, pageRequest);
     }
 
-    public Page<Post> findByListedPaged(boolean listed, String searchKeywordType, String searchKeyword, int page, int pageSize) {
+    public Page<Post> findByListedPaged(boolean listed, SearchKeywordTypeV1 searchKeywordType, String searchKeyword, int page, int pageSize) {
         if(Ut.str.isBlank(searchKeyword)) findByListedPaged(listed, page, pageSize);
 
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Order.desc("id")));
         searchKeyword = "%" + searchKeyword + "%";
 
         return switch(searchKeywordType) {
-            case "content" -> postRepository.findByListedAndContentLike(listed, searchKeyword, pageRequest);
+            case SearchKeywordTypeV1.content ->
+                    postRepository.findByListedAndContentLike(listed, searchKeyword, pageRequest);
             default -> postRepository.findByListedAndTitleLike(listed, searchKeyword, pageRequest);
         };
     }
@@ -85,14 +87,15 @@ public class PostService {
         return postRepository.findByAuthor(author, pageRequest);
     }
 
-    public Page<Post> findByAuthorPaged(Member author, String searchKeywordType, String searchKeyword, int page, int pageSize) {
+    public Page<Post> findByAuthorPaged(Member author, SearchKeywordTypeV1 searchKeywordType, String searchKeyword, int page, int pageSize) {
         if(Ut.str.isBlank(searchKeyword)) findByAuthorPaged(author, page, pageSize);
 
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Order.desc("id")));
         searchKeyword = "%" + searchKeyword + "%";
 
         return switch(searchKeywordType) {
-            case "content" -> postRepository.findByAuthorAndContentLike(author, searchKeyword, pageRequest);
+            case SearchKeywordTypeV1.content ->
+                    postRepository.findByAuthorAndContentLike(author, searchKeyword, pageRequest);
             default -> postRepository.findByAuthorAndTitleLike(author, searchKeyword, pageRequest);
         };
     }
