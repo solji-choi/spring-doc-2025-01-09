@@ -2,6 +2,7 @@ package com.ll.spring_doc_2025_01_09.global.initData;
 
 import com.ll.spring_doc_2025_01_09.domain.member.member.service.MemberService;
 import com.ll.spring_doc_2025_01_09.domain.post.post.service.PostService;
+import com.ll.spring_doc_2025_01_09.standard.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -23,7 +24,7 @@ public class DevInitData {
     @Bean
     public ApplicationRunner devInitDataApplicationRunner() {
         return args -> {
-
+            Ut.file.downloadByHttp("http://localhost:8080/v3/api-docs/apiV1", ".");
         };
     }
 }
