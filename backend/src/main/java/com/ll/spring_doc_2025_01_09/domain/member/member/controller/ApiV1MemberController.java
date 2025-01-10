@@ -6,6 +6,8 @@ import com.ll.spring_doc_2025_01_09.domain.member.member.service.MemberService;
 import com.ll.spring_doc_2025_01_09.global.exceptions.ServiceException;
 import com.ll.spring_doc_2025_01_09.global.rq.Rq;
 import com.ll.spring_doc_2025_01_09.global.rsData.RsData;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
+@Tag(name = "ApiV1MemberController", description = "API 회원 컨트롤러")
 public class ApiV1MemberController {
     private final MemberService memberService;
     private final Rq rq;
@@ -33,6 +36,7 @@ public class ApiV1MemberController {
 
     @PostMapping("/join")
     @Transactional
+    @Operation(summary = "회원가입")
     public RsData<MemberDto> join(
             @RequestBody @Valid MemberJoinReqBody reqBody
     ) {
@@ -63,6 +67,7 @@ public class ApiV1MemberController {
 
     @PostMapping("/login")
     @Transactional(readOnly = true)
+    @Operation(summary = "로그인", description = "apiKey, accessToken을 발급합니다. 해당 토큰들은 쿠키(HTTP-ONLY)로도 전달됩니다.")
     public RsData<MemberLoginResBody> login(
             @RequestBody @Valid MemberLoginReqBody reqBody
     ) {
@@ -91,6 +96,7 @@ public class ApiV1MemberController {
 
     @GetMapping("/me")
     @Transactional(readOnly = true)
+    @Operation(summary = "내정보")
     public MemberDto me() {
         Member actor = rq.findByActor().get();
 
@@ -99,6 +105,7 @@ public class ApiV1MemberController {
 
     @DeleteMapping("/logout")
     @Transactional(readOnly = true)
+    @Operation(summary = "로그아웃", description = "apiKey, accessToken을 제거합니다.")
     public RsData<Void> logout() {
         rq.deleteCookie("accessToken");
         rq.deleteCookie("apiKey");
